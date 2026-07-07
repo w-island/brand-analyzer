@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!--
+  Competitor Brand Analyzer — 리포트 템플릿 (W-ISLAND 디자인 시스템 적용)
+  ┌─ 에이전트 사용법 ─────────────────────────────────────────────┐
+  │ 1) 이 파일을 그대로 복사한다.                                  │
+  │ 2) <head>와 <style>, 상단 GNB는 절대 건드리지 않는다.         │
+  │ 3) 아래 @SLOT:이름 ~ /@SLOT 주석 구간 안쪽만                  │
+  │    실제 분석 결과 마크업으로 교체한다.                          │
+  │ 4) 문구는 전부 해요체 6원칙. UI 색은 의미 토큰만(raw hex 금지).│
+  │    단, 분석 대상 브랜드의 색 스와치(.swatch)엔 실제 hex 허용.  │
+  │ 5) reports\YYYY-MM-DD_브랜드명.html 로 저장한다.               │
+  └───────────────────────────────────────────────────────────────┘
+-->
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1577cc">
+<title>골든듀 — 타사 브랜드 분석 리포트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --blue-50:#ebf5fd;--blue-100:#cce6fa;--blue-200:#9fd0f4;--blue-300:#5cb4ee;
+  --blue-400:#1da4ff;--blue-500:#1577cc;--blue-600:#1166b0;--blue-700:#0e5390;
+  --blue-800:#0b4172;--blue-900:#093356;
+  --status-positive:#3BCC4B;--status-negative:#d6173a;--status-warning:#e8920c;
+}
+[data-theme="light"]{
+  --gray-50:#f9f9fa;--gray-100:#ececf0;--gray-200:#e3e3e8;--gray-300:#d6d7de;
+  --gray-400:#cecfd7;--gray-500:#c2c3cd;--gray-600:#b1b1bb;--gray-700:#8a8a92;
+  --gray-800:#6b6b71;--gray-900:#515256;--gray-1000:#2A2C2F;--g1000-rgb:42,44,47;
+  --surface-1:#ffffff;--surface-2:#f9fafb;--surface-3:#f2f4f6;
+  --txt-link:#1f7a8c;--bg-invert:#2A2C2F;--bg-blue-primary:#cce6fa;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.10);--shadow-xl:0 20px 48px rgba(0,0,0,.14);
+}
+[data-theme="dark"]{
+  --gray-50:#17171c;--gray-100:#202028;--gray-200:#292932;--gray-300:#3c3c46;
+  --gray-400:#4e4e5a;--gray-500:#6b6b78;--gray-600:#8b95a1;--gray-700:#a9adb8;
+  --gray-800:#c2c5cc;--gray-900:#e3e4e8;--gray-1000:#f3f4f6;--g1000-rgb:243,244,246;
+  --surface-1:#202028;--surface-2:#17171c;--surface-3:#292932;
+  --txt-link:#5ec8d2;--bg-invert:#f3f4f6;--bg-blue-primary:#0b4172;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow-md:0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.5);--shadow-xl:0 20px 48px rgba(0,0,0,.6);
+}
+:root{
+  --txt-primary:rgba(var(--g1000-rgb),1);--txt-secondary:rgba(var(--g1000-rgb),.80);
+  --txt-tertiary:rgba(var(--g1000-rgb),.60);--txt-caption:rgba(var(--g1000-rgb),.50);
+  --txt-disabled:rgba(var(--g1000-rgb),.30);
+  --txt-blue-primary:var(--blue-500);--txt-blue-secondary:var(--blue-400);
+  --bg-primary:var(--surface-1);--bg-secondary:var(--surface-2);--bg-tertiary:var(--surface-3);
+  --border-primary:var(--gray-1000);
+  --border-secondary:rgba(var(--g1000-rgb),.20);--border-tertiary:rgba(var(--g1000-rgb),.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--bg-secondary);color:var(--txt-primary);line-height:1.6;
+  -webkit-font-smoothing:antialiased;transition:background .18s,color .18s}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 20px 64px}
+
+/* GNB */
+.gnb{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;background:var(--bg-primary);border:1px solid var(--border-tertiary);
+  border-radius:12px;box-shadow:var(--shadow-sm);position:sticky;top:14px;z-index:10;margin-bottom:24px}
+.lockup{display:inline-flex;align-items:center;gap:11px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--blue-500);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.logo-title{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.logo-sub{font-size:12.5px;color:var(--txt-tertiary);font-weight:500}
+.theme-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border-secondary);
+  background:transparent;color:var(--txt-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{background:var(--bg-tertiary);color:var(--txt-primary)}
+
+/* Hero — 한 줄 요약 */
+.hero{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:28px 28px;box-shadow:var(--shadow-sm);margin-bottom:14px}
+.hero .eyebrow{font-size:12.5px;font-weight:700;color:var(--txt-blue-primary);letter-spacing:.02em;margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:7px}
+.hero h1{font-size:28px;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.hero .lead{font-size:16px;color:var(--txt-secondary);margin-top:12px;max-width:64ch}
+.hero .stamp{font-size:12px;color:var(--txt-caption);margin-top:16px}
+
+/* Section */
+.section{margin-top:34px}
+.section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.section-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.section-head .hint{font-size:13px;color:var(--txt-tertiary)}
+.card{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:22px;box-shadow:var(--shadow-sm)}
+.card + .card{margin-top:12px}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.badge.blue{background:color-mix(in srgb,var(--blue-500) 16%,var(--bg-primary));color:var(--txt-blue-primary)}
+.badge.pos{background:color-mix(in srgb,var(--status-positive) 18%,var(--bg-primary));color:var(--status-positive)}
+.badge.neg{background:color-mix(in srgb,var(--status-negative) 16%,var(--bg-primary));color:var(--status-negative)}
+.badge.gray{background:var(--bg-tertiary);color:var(--txt-secondary)}
+.badge.warn{background:color-mix(in srgb,var(--status-warning) 18%,var(--bg-primary));color:#9a6206}
+[data-theme="dark"] .badge.blue{color:var(--blue-200)}
+[data-theme="dark"] .badge.warn{color:#f0b35a}
+
+/* Overview key-value grid */
+.kv{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border-tertiary);
+  border:1px solid var(--border-tertiary);border-radius:14px;overflow:hidden}
+.kv .row{background:var(--bg-primary);padding:15px 18px}
+.kv .k{font-size:12px;font-weight:700;color:var(--txt-tertiary);margin-bottom:4px}
+.kv .v{font-size:15px;font-weight:600}
+
+/* Analysis block (재사용 — trend 패턴 기반) */
+.trend{display:flex;gap:16px;padding:18px;background:var(--bg-primary);
+  border:1px solid var(--border-tertiary);border-radius:14px;box-shadow:var(--shadow-sm)}
+.trend + .trend{margin-top:10px}
+.trend .rank{width:34px;height:34px;border-radius:10px;flex:0 0 auto;
+  background:color-mix(in srgb,var(--blue-500) 14%,var(--bg-primary));color:var(--blue-500);
+  font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+[data-theme="dark"] .trend .rank{color:var(--blue-200)}
+.trend .body{flex:1;min-width:0}
+.trend .tline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.trend .tname{font-size:17px;font-weight:700}
+.trend .why{font-size:14px;color:var(--txt-secondary)}
+.trend .src{font-size:12.5px;color:var(--txt-caption);margin-top:8px}
+
+/* Color swatches (분석 대상 브랜드 실제 색 — 데이터 표시용 예외) */
+.swatches{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.swatch{text-align:center}
+.swatch .chip{width:64px;height:64px;border-radius:12px;border:1px solid var(--border-tertiary);box-shadow:var(--shadow-sm)}
+.swatch .hex{font-size:11.5px;color:var(--txt-tertiary);margin-top:6px;font-weight:600;letter-spacing:.01em}
+
+/* Quote (실제 카피 인용) */
+.quote{border-left:3px solid var(--blue-500);padding:6px 0 6px 15px;margin:12px 0;
+  font-size:15px;font-weight:600;color:var(--txt-primary)}
+.quote .who{display:block;font-size:12.5px;font-weight:500;color:var(--txt-caption);margin-top:5px}
+
+/* Tag chip */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.tagchip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  background:var(--bg-tertiary);color:var(--txt-secondary);padding:5px 11px;border-radius:999px}
+.tagchip.brand{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .tagchip.brand{color:var(--blue-200)}
+
+/* Pros / Cons */
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.pc .box{border:1px solid var(--border-tertiary);border-radius:12px;padding:14px 16px;background:var(--bg-secondary)}
+.pc .box h4{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.pc .box.good h4{color:var(--status-positive)}
+.pc .box.weak h4{color:var(--status-negative)}
+.pc .box ul{list-style:none;font-size:13.5px;color:var(--txt-secondary)}
+.pc .box li{padding-left:14px;position:relative;margin-top:5px}
+.pc .box li::before{content:'·';position:absolute;left:3px;color:var(--txt-tertiary)}
+
+/* List rows (insights) */
+.actions .listrow{display:flex;gap:14px;padding:16px 18px;background:var(--bg-primary);
+  border:1px solid var(--border-tertiary)}
+.actions .listrow:first-child{border-radius:14px 14px 0 0}
+.actions .listrow:last-child{border-radius:0 0 14px 14px}
+.actions .listrow + .listrow{border-top:none}
+.actions .lead{width:38px;height:38px;border-radius:10px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--blue-500) 14%,var(--bg-primary));color:var(--blue-500);font-weight:800;font-size:13px}
+[data-theme="dark"] .actions .lead{color:var(--blue-200)}
+.actions .ab{flex:1;min-width:0}
+.actions .at{font-size:15px;font-weight:700;margin-bottom:3px}
+.actions .as{font-size:13.5px;color:var(--txt-secondary)}
+
+/* Alert (데이터 한계) */
+.alert{display:flex;gap:10px;padding:14px 16px;border-radius:12px;font-size:13.5px;align-items:flex-start;margin-top:16px}
+.alert.info{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .alert.info{color:var(--blue-200)}
+.alert .ico{flex:0 0 auto;margin-top:1px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border-tertiary);
+  font-size:12.5px;color:var(--txt-caption);text-align:center}
+
+@media (max-width:599px){
+  .kv,.pc{grid-template-columns:1fr}
+  .hero h1{font-size:23px}
+  .wrap{padding:14px 14px 48px}
+}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.22);border-radius:999px;border:4px solid transparent;background-clip:padding-box;min-height:44px}
+::-webkit-scrollbar-thumb:hover{background-color:rgba(0,0,0,.38)}
+[data-theme="dark"] ::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- GNB (고정 — 수정 금지) -->
+  <div class="gnb">
+    <div class="lockup">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </div>
+      <div>
+        <div class="logo-title">Brand Analyzer</div>
+        <div class="logo-sub">타사 브랜드 · UI·소재·카피·마케팅 분석</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="(function(h){h.dataset.theme=h.dataset.theme==='dark'?'light':'dark'})(document.documentElement)" aria-label="테마 바꾸기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+
+  <!-- @SLOT:HERO -->
+<div class="hero"><span class="eyebrow">● 이번 분석 대상</span><h1><b>골든듀</b>는 세대를 초월한 디자인과 엄격한 품질로 사람을 끌어모아요.</h1><p class="lead">첫 화면은 어쩌면 ‘전통과 기술력’ 메시지를 담고 있을 거예요. 우리가 배울 점은 강한 브랜드 정체성을 헤드라인으로 명확히 드러낸다는 것이예요.</p><p class="stamp">분석일 2026-07-07 · 대상 goldendew.com · 근거: 웹검색 텍스트 · 시각 요소 일부 추정</p></div>
+  <!-- /@SLOT:HERO -->
+
+  <!-- @SLOT:OVERVIEW -->
+<div class="section"><div class="section-head"><h2>브랜드 개요</h2></div><div class="kv"><div class="row"><div class="k">브랜드</div><div class="v">골든듀</div></div><div class="row"><div class="k">홈페이지</div><div class="v">goldendew.com</div></div><div class="row"><div class="k">업종 · 카테고리</div><div class="v">주얼리·귀금속</div></div><div class="row"><div class="k">타깃</div><div class="v">결혼·기념일 등 특별 순간을 기념하는 고객</div></div><div class="row"><div class="k">포지셔닝</div><div class="v">국내 최초·최대 규모의 파인 주얼리 브랜드, 전통과 기술 강조</div></div><div class="row"><div class="k">가격대</div><div class="v">수십만원부터 수백만원 대 (예: 펜던트 590,000원 ~ 1,780,000원, 반지 4,790,000원 등)</div></div></div></div>
+  <!-- /@SLOT:OVERVIEW -->
+
+  <!-- @SLOT:UIUX -->
+<div class="section"><div class="section-head"><h2>UI/UX 디자인</h2><span class="hint">홈페이지 화면 구성</span></div><div class="card"><div class="chips" style="margin-top:0"><span class="tagchip">고급스러움</span><span class="tagchip">심플 구성</span></div><div class="swatches" style="margin-top:16px"><div class="swatch"><div class="chip" style="background:#FFFFFF"></div><div class="hex">#FFFFFF (추정)</div></div></div><p class="why" style="margin-top:16px">제품 중심의 깔끔한 레이아웃이 예상돼요. 주요 컬렉션을 베스트/신상품 섹션으로 한눈에 보여주며다가입 전환 흐름을 강화했을 것 같아요.</p><div class="pc"><div class="box good"><h4>잘한 점</h4><ul><li>베스트·신상품을 명확히 구분해 사용자의 선택을 돕는 구조예요.</li><li>가격 정보와 제품명이 상세하게 나오는 점이 신뢰감을 줘요.</li></ul></div><div class="box weak"><h4>아쉬운 점</h4><ul><li>메인 컬러나 핵심 시각 요소는 추정이라 사용성 해석에 한계가 있어요.</li></ul></div></div></div></div>
+  <!-- /@SLOT:UIUX -->
+
+  <!-- @SLOT:CREATIVES -->
+<div class="section"><div class="section-head"><h2>광고 · 비주얼 소재</h2><span class="hint">크리에이티브 패턴</span></div><div class="trend"><div class="rank">A</div><div class="body"><div class="tline"><span class="tname">팝업 스토어 × 셀러브리티</span><span class="badge blue">전시형 이벤트</span></div><p class="why">김태리, 혜리, 육성재가 참석한 <NEW ICONS> 팝업 스토어가 감각적 3D 아트 전시와 함께 열려 브랜드 아이콘을 시각적으로 강화했어요.</p><div class="chips"><span class="tagchip">브랜디드 이벤트</span><span class="tagchip">비주얼 전시</span></div><p class="src">근거: 마리끌레르 코리아 보도</p></div></div><div class="trend"><div class="rank">B</div><div class="body"><div class="tline"><span class="tname">전통 헤리티지 컬렉션</span><span class="badge">콜라보</span></div><p class="why">안상수체 타이포그래피와 협업한 2025 F/W 헤리티지 컬렉션 전시는 전통과 현대의 융합을 시각으로 구현했어요.</p><div class="chips"><span class="tagchip">콜라보 크리에이티브</span></div><p class="src">근거: LinkedIn 업데이트</p></div></div></div>
+  <!-- /@SLOT:CREATIVES -->
+
+  <!-- @SLOT:COPY -->
+<div class="section"><div class="section-head"><h2>카피 &amp; 후킹</h2><span class="hint">사람을 끌어모으는 문구</span></div><div class="card"><div class="quote">"세대를 초월한 가치"<span class="who">브랜드 소개 헤드라인</span></div><p class="why" style="margin-top:14px">‘세대를 초월한 가치’라는 카피는 오랜 전통과 타임리스함을 노골적으로 강조해요.</p><div class="chips"><span class="tagchip brand">전통</span><span class="tagchip">타임리스</span></div></div><div class="card"><div class="quote">"Korea’s best jewelry brand"<span class="who">영문 소개</span></div><p class="why" style="margin-top:14px">‘국내 최고 브랜드’라는 문구는 권위와 지위를 강조해 신뢰를 끌어요.</p><div class="chips"><span class="tagchip">권위</span><span class="tagchip">신뢰</span></div></div></div>
+  <!-- /@SLOT:COPY -->
+
+  <!-- @SLOT:MARKETING -->
+<div class="section actions"><div class="section-head"><h2>마케팅 전략</h2></div><div class="listrow"><div class="lead">P</div><div class="ab"><div class="at">포지셔닝</div><div class="as">국내 최초·최대 규모의 파인 주얼리 브랜드라는 전통 기반 포지셔닝</div></div></div><div class="listrow"><div class="lead">U</div><div class="ab"><div class="at">차별점(USP)</div><div class="as">엄격한 품질 감정·기술력, 자체 아뜰리에 운영, 다이아몬드 투명성</div></div></div><div class="listrow"><div class="lead">$</div><div class="ab"><div class="at">프로모션 구조</div><div class="as">할인 이벤트 (예: 창립 기념 최대 31% 할인), 팝업, 컬렉션 전시 등</div></div></div><div class="listrow"><div class="lead">#</div><div class="ab"><div class="at">채널</div><div class="as">백화점 매장 + 공식 온라인샵 + 팝업 전시 + SNS 홍보</div></div></div></div></div>
+  <!-- /@SLOT:MARKETING -->
+
+  <!-- @SLOT:INSIGHTS -->
+<div class="section actions"><div class="section-head"><h2>W-ISLAND 인사이트</h2><span class="hint">우리가 바로 쓸 것</span></div><div class="listrow"><div class="lead">1</div><div class="ab"><div class="at">따라 할 것 — 인스타 실물 전시와 셀럽 모델 활용 팝업</div><div class="as">VIVOIR 혹은 wbL에서 한정 팝업 이벤트에 셀러브리티 또는 아티스트 협업을 연결할 수 있어요.</div></div></div><div class="listrow"><div class="lead">2</div><div class="ab"><div class="at">응용할 것 — 전통 × 현대 콜라보 카피</div><div class="as">골든듀처럼 전통적 요소를 현대적으로 재해석한 콜라보를 선보여 wbL의 미니멀·세이지그린 감성과 연결할 수 있어요.</div></div></div><div class="listrow"><div class="lead">✓</div><div class="ab"><div class="at">우리가 더 나은 것 — 커스터마이징/구성 옵션 강조</div><div class="as">골든듀는 전통 중심이나, wbL/VIVOIR은 소비자 취향 기반 커스터마이징 서비스를 더 강화할 수 있어요.</div></div></div></div></div>
+  <!-- /@SLOT:INSIGHTS -->
+
+  <!-- @SLOT:DATANOTE -->
+<div class="section"><div class="alert info"><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg><div>이 리포트는 <b>웹검색 텍스트</b>를 바탕으로 자동 생성했어요. 색·레이아웃·광고 비주얼은 <b>스크린샷이 있어야 정확</b>해서, 표기된 일부는 추정이에요.</div></div></div>
+  <!-- /@SLOT:DATANOTE -->
+
+  <div class="footer">Competitor Brand Analyzer · W-ISLAND 디자인 시스템 적용</div>
+
+</div>
+</body>
+</html>
