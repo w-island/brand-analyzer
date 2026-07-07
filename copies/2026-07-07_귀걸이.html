@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+  W-ISLAND Ad Copy Lab — 광고 문구 리포트 템플릿 (W-ISLAND 디자인 시스템 적용)
+  ┌─ 사용법 ───────────────────────────────────────────────────────┐
+  │ 1) <head>·<style>·상단 GNB는 건드리지 않는다.                   │
+  │ 2) @SLOT:이름 ~ /@SLOT 주석 구간 안쪽만 실제 결과로 교체한다.   │
+  │ 3) 문구는 전부 해요체 6원칙. UI 색은 의미 토큰만(raw hex 금지). │
+  │ 4) copies\YYYY-MM-DD_카테고리.html 로 저장한다.                 │
+  └────────────────────────────────────────────────────────────────┘
+-->
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1577cc">
+<title>귀걸이 광고 후킹 문구 — W-ISLAND Ad Copy Lab</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --blue-50:#ebf5fd;--blue-100:#cce6fa;--blue-200:#9fd0f4;--blue-300:#5cb4ee;
+  --blue-400:#1da4ff;--blue-500:#1577cc;--blue-600:#1166b0;--blue-700:#0e5390;
+  --blue-800:#0b4172;--blue-900:#093356;
+  --status-positive:#3BCC4B;--status-negative:#d6173a;--status-warning:#e8920c;
+}
+[data-theme="light"]{
+  --gray-50:#f9f9fa;--gray-100:#ececf0;--gray-200:#e3e3e8;--gray-300:#d6d7de;
+  --gray-400:#cecfd7;--gray-500:#c2c3cd;--gray-600:#b1b1bb;--gray-700:#8a8a92;
+  --gray-800:#6b6b71;--gray-900:#515256;--gray-1000:#2A2C2F;--g1000-rgb:42,44,47;
+  --surface-1:#ffffff;--surface-2:#f9fafb;--surface-3:#f2f4f6;
+  --txt-link:#1f7a8c;--bg-invert:#2A2C2F;--bg-blue-primary:#cce6fa;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.10);--shadow-xl:0 20px 48px rgba(0,0,0,.14);
+}
+[data-theme="dark"]{
+  --gray-50:#17171c;--gray-100:#202028;--gray-200:#292932;--gray-300:#3c3c46;
+  --gray-400:#4e4e5a;--gray-500:#6b6b78;--gray-600:#8b95a1;--gray-700:#a9adb8;
+  --gray-800:#c2c5cc;--gray-900:#e3e4e8;--gray-1000:#f3f4f6;--g1000-rgb:243,244,246;
+  --surface-1:#202028;--surface-2:#17171c;--surface-3:#292932;
+  --txt-link:#5ec8d2;--bg-invert:#f3f4f6;--bg-blue-primary:#0b4172;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow-md:0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.5);--shadow-xl:0 20px 48px rgba(0,0,0,.6);
+}
+:root{
+  --txt-primary:rgba(var(--g1000-rgb),1);--txt-secondary:rgba(var(--g1000-rgb),.80);
+  --txt-tertiary:rgba(var(--g1000-rgb),.60);--txt-caption:rgba(var(--g1000-rgb),.50);
+  --txt-disabled:rgba(var(--g1000-rgb),.30);
+  --txt-blue-primary:var(--blue-500);--txt-blue-secondary:var(--blue-400);
+  --bg-primary:var(--surface-1);--bg-secondary:var(--surface-2);--bg-tertiary:var(--surface-3);
+  --border-primary:var(--gray-1000);
+  --border-secondary:rgba(var(--g1000-rgb),.20);--border-tertiary:rgba(var(--g1000-rgb),.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--bg-secondary);color:var(--txt-primary);line-height:1.6;
+  -webkit-font-smoothing:antialiased;transition:background .18s,color .18s}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 20px 64px}
+
+/* GNB */
+.gnb{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;background:var(--bg-primary);border:1px solid var(--border-tertiary);
+  border-radius:12px;box-shadow:var(--shadow-sm);position:sticky;top:14px;z-index:10;margin-bottom:24px}
+.lockup{display:inline-flex;align-items:center;gap:11px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--blue-500);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.logo-title{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.logo-sub{font-size:12.5px;color:var(--txt-tertiary);font-weight:500}
+.theme-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border-secondary);
+  background:transparent;color:var(--txt-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{background:var(--bg-tertiary);color:var(--txt-primary)}
+
+/* Hero */
+.hero{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:28px 28px;box-shadow:var(--shadow-sm);margin-bottom:14px}
+.hero .eyebrow{font-size:12.5px;font-weight:700;color:var(--txt-blue-primary);letter-spacing:.02em;margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:7px}
+.hero h1{font-size:28px;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.hero .lead{font-size:16px;color:var(--txt-secondary);margin-top:12px;max-width:64ch}
+.hero .stamp{font-size:12px;color:var(--txt-caption);margin-top:16px}
+
+/* Section */
+.section{margin-top:34px}
+.section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.section-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.section-head .hint{font-size:13px;color:var(--txt-tertiary)}
+.card{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:22px;box-shadow:var(--shadow-sm)}
+.card + .card{margin-top:12px}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.badge.blue{background:color-mix(in srgb,var(--blue-500) 16%,var(--bg-primary));color:var(--txt-blue-primary)}
+.badge.pos{background:color-mix(in srgb,var(--status-positive) 18%,var(--bg-primary));color:var(--status-positive)}
+.badge.neg{background:color-mix(in srgb,var(--status-negative) 16%,var(--bg-primary));color:var(--status-negative)}
+.badge.gray{background:var(--bg-tertiary);color:var(--txt-secondary)}
+.badge.warn{background:color-mix(in srgb,var(--status-warning) 18%,var(--bg-primary));color:#9a6206}
+[data-theme="dark"] .badge.blue{color:var(--blue-200)}
+[data-theme="dark"] .badge.warn{color:#f0b35a}
+
+/* Analysis / copy block (trend 패턴 재사용) */
+.trend{display:flex;gap:16px;padding:18px;background:var(--bg-primary);
+  border:1px solid var(--border-tertiary);border-radius:14px;box-shadow:var(--shadow-sm)}
+.trend + .trend{margin-top:10px}
+.trend .rank{width:34px;height:34px;border-radius:10px;flex:0 0 auto;
+  background:color-mix(in srgb,var(--blue-500) 14%,var(--bg-primary));color:var(--blue-500);
+  font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+[data-theme="dark"] .trend .rank{color:var(--blue-200)}
+.trend .body{flex:1;min-width:0}
+.trend .tline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.trend .tname{font-size:17px;font-weight:700}
+.trend .why{font-size:14px;color:var(--txt-secondary)}
+.trend .src{font-size:12.5px;color:var(--txt-caption);margin-top:8px}
+
+/* Quote (실제 문구 / 생성 카피) */
+.quote{border-left:3px solid var(--blue-500);padding:6px 0 6px 15px;margin:12px 0;
+  font-size:15px;font-weight:600;color:var(--txt-primary)}
+.quote .who{display:block;font-size:12.5px;font-weight:500;color:var(--txt-caption);margin-top:5px}
+
+/* Tag chip */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.tagchip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  background:var(--bg-tertiary);color:var(--txt-secondary);padding:5px 11px;border-radius:999px}
+.tagchip.brand{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .tagchip.brand{color:var(--blue-200)}
+
+/* List rows */
+.actions .listrow{display:flex;gap:14px;padding:16px 18px;background:var(--bg-primary);
+  border:1px solid var(--border-tertiary)}
+.actions .listrow:first-child{border-radius:14px 14px 0 0}
+.actions .listrow:last-child{border-radius:0 0 14px 14px}
+.actions .listrow + .listrow{border-top:none}
+.actions .lead{width:38px;height:38px;border-radius:10px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--blue-500) 14%,var(--bg-primary));color:var(--blue-500);font-weight:800;font-size:13px}
+[data-theme="dark"] .actions .lead{color:var(--blue-200)}
+.actions .ab{flex:1;min-width:0}
+.actions .at{font-size:15px;font-weight:700;margin-bottom:3px}
+.actions .as{font-size:13.5px;color:var(--txt-secondary)}
+
+/* Alert */
+.alert{display:flex;gap:10px;padding:14px 16px;border-radius:12px;font-size:13.5px;align-items:flex-start;margin-top:16px}
+.alert.info{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .alert.info{color:var(--blue-200)}
+.alert .ico{flex:0 0 auto;margin-top:1px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border-tertiary);
+  font-size:12.5px;color:var(--txt-caption);text-align:center}
+
+@media (max-width:599px){
+  .hero h1{font-size:23px}
+  .wrap{padding:14px 14px 48px}
+}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.22);border-radius:999px;border:4px solid transparent;background-clip:padding-box;min-height:44px}
+::-webkit-scrollbar-thumb:hover{background-color:rgba(0,0,0,.38)}
+[data-theme="dark"] ::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- GNB (고정 — 수정 금지) -->
+  <div class="gnb">
+    <div class="lockup">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+      </div>
+      <div>
+        <div class="logo-title">Ad Copy Lab</div>
+        <div class="logo-sub">제품 카테고리별 광고 후킹 문구</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="(function(h){h.dataset.theme=h.dataset.theme==='dark'?'light':'dark'})(document.documentElement)" aria-label="테마 바꾸기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+
+  <!-- @SLOT:HERO -->
+<div class="hero"><span class="eyebrow">● 광고 문구 생성 대상</span><h1><b>귀걸이</b> 광고에 바로 쓸 <b>후킹 문구</b>를 뽑았어요.</h1><p class="lead">요즘 귀걸이 광고·상세페이지·쇼핑 검색·후기에서 반복되는 문구를 모아 패턴을 읽고, wbL에 맞춰 카피 15개를 만들었어요.</p><p class="stamp">생성일 2026-07-07 · 대상 카테고리 귀걸이 · 근거: 웹검색 · 실제 클릭수는 비공개라 반응·집행기간으로 추정</p></div>
+  <!-- /@SLOT:HERO -->
+
+  <!-- @SLOT:MARKET -->
+<div class="section"><div class="section-head"><h2>요즘 잘 먹히는 광고 문구</h2><span class="hint">시장에서 반복·장기 노출되는 패턴</span></div><div class="trend"><div class="rank">A</div><div class="body"><div class="tline"><span class="tname">매일 착용·데일리 루틴형</span><span class="badge blue">반복 패턴</span></div><div class="quote">“잘때껴도 편안한 데일리 주얼리”<span class="who">wbL 카테고리 상단 문구</span></div><p>귀걸이는 충동구매보다 ‘매일 낄 수 있나’를 먼저 따져요. 그래서 데일리, 편안함, 잠잘 때까지라는 표현이 구매 장벽을 낮춰요. 특별한 날보다 일상 사용 장면을 먼저 보여줘서 멈춰 보게 해요.</p><div class="chips"><span class="tagchip">데일리</span><span class="tagchip">착용감</span><span class="tagchip">루틴</span></div><p>근거: wbL 카테고리와 상세페이지에서 ‘데일리·편안함’ 구조가 반복돼요. ([m.wblbeauty.com](https://m.wblbeauty.com/product/list.html?cate_no=868&utm_source=openai))</p></div></div><div class="trend"><div class="rank">B</div><div class="body"><div class="tline"><span class="tname">원터치·편한 착용감형</span><span class="badge blue">반복 패턴</span></div><div class="quote">“원터치 링 귀걸이만의 편안한 착용감으로 자꾸만 찾게 되는 데일리 아이템입니다.”<span class="who">귀걸이 상세페이지</span></div><p>원터치는 ‘예쁘다’보다 ‘쓰기 쉽다’를 바로 말해줘요. 귀걸이를 자주 빼고 끼는 사람에게는 디자인보다 번거로움 제거가 강한 후킹 포인트예요.</p><div class="chips"><span class="tagchip">원터치</span><span class="tagchip">편안함</span><span class="tagchip">반복 사용</span></div><p>근거: 원터치 링 귀걸이 상세에서 ‘편안한 착용감·자꾸만 찾게 되는’ 표현이 쓰였고, 다른 쇼핑몰 상품명에서도 원터치·데일리·심플 조합이 반복돼요. ([wingbling.co.kr](https://wingbling.co.kr/product/detail.html?cate_no=1&display_group=529&product_no=6068&utm_source=openai))</p></div></div><div class="trend"><div class="rank">C</div><div class="body"><div class="tline"><span class="tname">연예인 착용·PICK 인증형</span><span class="badge gray">사회적 증거</span></div><div class="quote">“[아이유 PICK] WHITEMOND 귀걸이”<span class="who">제이에스티나 상품명</span></div><p>주얼리는 착용 컷이 곧 설득이에요. ‘PICK’, ‘착용’ 같은 단어는 내가 상상해야 할 스타일링을 이미 누군가 검증했다는 느낌을 줘요. 특히 작은 귀걸이는 사진 속 얼굴 무드와 연결될 때 클릭 이유가 생겨요.</p><div class="chips"><span class="tagchip">PICK</span><span class="tagchip">착용 인증</span><span class="tagchip">신뢰</span></div><p>근거: 제이에스티나와 wbL 상품명에서 ‘아이유 PICK’, ‘카리나 착용’, ‘연예인착용’ 구조가 반복돼요. ([shinsegaev.com](https://www.shinsegaev.com/goods/initDetailGoods.siv?goods_no=2302662039&utm_source=openai))</p></div></div><div class="trend"><div class="rank">D</div><div class="body"><div class="tline"><span class="tname">여름·실버·한정 혜택형</span><span class="badge warn">시즌 패턴</span></div><div class="quote">“여름을 빛내는 홀리데이 한정 혜택”<span class="who">2026 썸머 실버 홀리데이 프로모션</span></div><p>2026년 7월 지금은 여름 액세서리 시즌이에요. ‘실버’, ‘홀리데이’, ‘빛내는’은 땀·휴가·가벼운 옷차림과 바로 연결돼요. 여기에 쿠폰팩이나 기프트를 붙이면 지금 사야 할 이유가 생겨요.</p><div class="chips"><span class="tagchip">여름</span><span class="tagchip">실버</span><span class="tagchip">한정 혜택</span></div><p>근거: wbL은 2026년 6월 29일~7월 12일 ‘썸머 실버 홀리데이’와 최대 30% 쿠폰팩을 노출하고 있고, 2026 S/S 패션 기사에서도 얼굴톤을 밝히는 컬러·여름 포인트 흐름이 보여요. ([wingbling.co.kr](https://wingbling.co.kr/product/detail.html?cate_no=387&display_group=1&product_no=3266&utm_source=openai))</p></div></div><div class="trend"><div class="rank">E</div><div class="body"><div class="tline"><span class="tname">알러지방지·은침 안심형</span><span class="badge blue">반복 패턴</span></div><div class="quote">“데일리 포인트 레이어드 귀걸이세트 은침 큐빅 진주 패션 귀걸이 알러지방지 써지컬”<span class="who">지그재그 상품명</span></div><p>귀걸이는 피부에 닿는 제품이라 예쁨만 말하면 부족해요. ‘은침’, ‘알러지방지’, ‘써지컬’은 민감한 고객의 불안을 먼저 건드려요. 단, 개인차가 있어 ‘무조건 알러지 없음’처럼 단정하면 위험해요.</p><div class="chips"><span class="tagchip">은침</span><span class="tagchip">알러지방지</span><span class="tagchip">안심</span></div><p>근거: 쿠팡·지그재그·번개장터 상품명과 설명에서 은침, 실버925, 알러지방지, 써지컬 표현이 반복돼요. ([coupang.com](https://www.coupang.com/vp/products/8883206640?utm_source=openai))</p></div></div></div>
+  <!-- /@SLOT:MARKET -->
+
+  <!-- @SLOT:COPYSET -->
+<div class="section"><div class="section-head"><h2>wbL용 광고 문구</h2><span class="hint">복사해서 바로 쓰는 후킹 카피</span></div><div class="trend"><div class="rank">1</div><div class="body"><div class="tline"><span class="tname">감성 데일리 앵글</span><span class="badge blue">앵글</span></div><div class="quote">“오늘 옷이 심플할수록, 귀에는 작은 빛을 더해요.”<span class="who">헤드라인</span></div><div class="quote">“세이지그린·아이보리 무드에 어울리는 wbL 데일리 귀걸이예요.”<span class="who">서브카피</span></div><div class="quote">“오늘의 귀걸이 고르기 →”<span class="who">CTA 버튼</span></div><div class="chips"><span class="tagchip brand">감성</span><span class="tagchip brand">미니멀</span><span class="tagchip brand">데일리룩</span></div></div></div><div class="trend"><div class="rank">2</div><div class="body"><div class="tline"><span class="tname">편안한 착용 앵글</span><span class="badge blue">앵글</span></div><div class="quote">“예쁜데, 자꾸 손이 가는 이유는 편해서예요.”<span class="who">헤드라인</span></div><div class="quote">“출근 전에도, 약속 전에도 가볍게 착용하기 좋은 데일리 귀걸이를 골라보세요.”<span class="who">서브카피</span></div><div class="quote">“편한 데일리 귀걸이 보기 →”<span class="who">CTA 버튼</span></div><div class="chips"><span class="tagchip brand">착용감</span><span class="tagchip brand">원터치</span><span class="tagchip brand">반복구매</span></div></div></div><div class="trend"><div class="rank">3</div><div class="body"><div class="tline"><span class="tname">여름 실버 시즌 앵글</span><span class="badge blue">앵글</span></div><div class="quote">“햇빛 아래 더 맑아 보이는 실버 한 점.”<span class="who">헤드라인</span></div><div class="quote">“린넨 셔츠, 흰 티, 여름 원피스에 가볍게 맞는 wbL 귀걸이예요.”<span class="who">서브카피</span></div><div class="quote">“여름 귀걸이 먼저 담기 →”<span class="who">CTA 버튼</span></div><div class="chips"><span class="tagchip brand">여름</span><span class="tagchip brand">실버</span><span class="tagchip brand">시즌훅</span></div></div></div><div class="trend"><div class="rank">4</div><div class="body"><div class="tline"><span class="tname">착용 인증·사회적 증거 앵글</span><span class="badge blue">앵글</span></div><div class="quote">“사진 속 분위기, 귀걸이 하나로 가까워져요.”<span class="who">헤드라인</span></div><div class="quote">“연예인 착용 무드로 고른 듯한 존재감, 과하지 않게 데일리로 즐겨요.”<span class="who">서브카피</span></div><div class="quote">“착용 무드 확인하기 →”<span class="who">CTA 버튼</span></div><div class="chips"><span class="tagchip brand">착용컷</span><span class="tagchip brand">무드설득</span><span class="tagchip brand">신뢰</span></div></div></div><div class="trend"><div class="rank">5</div><div class="body"><div class="tline"><span class="tname">안심 소재·민감 귀 앵글</span><span class="badge blue">앵글</span></div><div class="quote">“귀걸이를 고를 때, 예쁨만큼 소재도 보세요.”<span class="who">헤드라인</span></div><div class="quote">“피부에 닿는 주얼리라 더 신중하게, wbL이 데일리 소재와 착용감을 함께 챙겨요.”<span class="who">서브카피</span></div><div class="quote">“소재별 귀걸이 보기 →”<span class="who">CTA 버튼</span></div><div class="chips"><span class="tagchip brand">소재안심</span><span class="tagchip brand">민감귀</span><span class="tagchip brand">정보형</span></div></div></div></div>
+  <!-- /@SLOT:COPYSET -->
+
+  <!-- @SLOT:TIPS -->
+<div class="section actions"><div class="section-head"><h2>활용 팁</h2><span class="hint">어디에 · 어떻게 쓸까</span></div><div><div class="listrow"><div class="lead">1</div><div class="ab"><div class="at">채널별로 골라 써요</div><div class="as">인스타·릴스 첫 화면은 “오늘 옷이 심플할수록…”처럼 장면형 훅을 쓰고, 검색광고는 “데일리 귀걸이·원터치·실버925·알러지방지”처럼 검색어형 문구를 앞에 둬요. Meta 광고 라이브러리는 경쟁사 소재 흐름을 보는 공개 도구라 장기 집행 여부만 참고하면 좋아요. ([facebook.com](https://www.facebook.com/help/259468828226154/?utm_source=openai))</div></div></div><div class="listrow"><div class="lead">2</div><div class="ab"><div class="at">A/B로 검증해요</div><div class="as">A안은 감성형 “작은 빛”, B안은 기능형 “편해서 자꾸 손이 가요”, C안은 시즌형 “여름 실버”로 나눠요. 같은 제품 사진이라도 첫 문장만 바꿔 클릭률 차이를 확인해요.</div></div></div><div class="listrow"><div class="lead">✓</div><div class="ab"><div class="at">과장·표현을 조심해요</div><div class="as">귀걸이는 소재 민감도가 큰 제품이에요. “알러지 완전 차단”, “누구나 트러블 없음”처럼 단정하지 말고 “개인차가 있어요”, “민감하신 분은 소재를 확인하세요”를 함께 써요. TikTok 같은 숏폼 채널은 최근 게시물을 광고로 전환하는 스파크 애즈 흐름도 참고하되, 실제 성과는 계정 데이터로 봐야 해요. ([ads.tiktok.com](https://ads.tiktok.com/business/library/KR_SMB_Summer_Success_Playbook_2024.pdf?utm_source=openai))</div></div></div></div></div>
+  <!-- /@SLOT:TIPS -->
+
+  <!-- @SLOT:DATANOTE -->
+<div class="section"><div class="alert info"><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg><div>실제 <b>클릭수·CTR</b>은 광고주 비공개라 못 가져와요. 이 문구들은 <b>상세페이지 상단 문구·반복 상품명 구조·시즌 프로모션·후기형 키워드·광고 라이브러리 활용 방식</b>을 대체 신호로 삼아 만든 거예요. 특히 메타 광고 라이브러리는 광고 확인용 공개 도구지만, 검색으로 모든 실제 광고 카피와 집행기간을 안정적으로 가져오기는 어려워요. 실제 성과는 <b>A/B 테스트</b>로 확인하세요. ([facebook.com](https://www.facebook.com/help/259468828226154/?utm_source=openai))</div></div></div>
+  <!-- /@SLOT:DATANOTE -->
+
+  <div class="footer">W-ISLAND Ad Copy Lab · 디자인 시스템 적용</div>
+
+</div>
+</body>
+</html>
