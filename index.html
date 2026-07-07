@@ -126,6 +126,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
 [data-theme="dark"] .empty .ico{color:var(--blue-200)}
 .empty h4{font-size:16px;font-weight:700}
 .empty p{font-size:14px;color:var(--txt-tertiary);margin-top:8px}
+.reqbox{display:inline-flex;align-items:center;gap:10px;margin-top:18px;background:var(--bg-tertiary);
+  border:1px solid var(--border-secondary);border-radius:12px;padding:10px 10px 10px 16px;max-width:100%;flex-wrap:wrap;justify-content:center}
+.reqbox code{font-family:inherit;font-size:14px;font-weight:600;color:var(--txt-primary);white-space:normal;word-break:break-all;text-align:left}
+.reqcopy{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;
+  background:var(--blue-500);color:#fff;border:none;border-radius:9px;padding:9px 14px;flex:0 0 auto;transition:.15s}
+.reqcopy:hover{background:var(--blue-600)}
+.reqcopy.done{background:var(--status-positive)}
 
 /* Alert */
 .alert{display:flex;gap:10px;padding:14px 16px;border-radius:12px;font-size:13.5px;align-items:flex-start;margin-top:22px}
@@ -170,11 +177,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
   <!-- HERO + 검색 -->
   <div class="hero">
     <span class="eyebrow">● 타사 브랜드 분석 모음</span>
-    <h1>분석한 브랜드를 검색해서 바로 열어봐요.</h1>
-    <p class="lead">타사 홈페이지의 UI·광고 소재·카피·마케팅을 뜯어본 리포트를 한곳에 모았어요. 브랜드명·업종·키워드로 찾아서 리포트를 열어봐요.</p>
+    <h1>타사 브랜드명·주소를 넣으면 분석해요.</h1>
+    <p class="lead">이미 분석한 브랜드는 아래에서 바로 열어봐요. 아직 없는 브랜드를 입력하면, 클로드에게 그대로 붙여넣을 <b>분석 요청 문구</b>를 만들어드려요.</p>
     <div class="searchbar" id="searchbar">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input id="q" type="search" placeholder="브랜드명·업종·키워드로 검색해요 (예: 마사지, 광고, D2C)" autocomplete="off" aria-label="브랜드 검색">
+      <input id="q" type="search" placeholder="브랜드명 또는 홈페이지 주소를 넣어요 (예: 풀리오, puliodays.com)" autocomplete="off" aria-label="브랜드 검색·분석">
       <button class="clr" id="clr" aria-label="검색어 지우기">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -194,10 +201,17 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
     <div class="rgrid" id="rgrid"></div>
     <div class="empty" id="empty" style="display:none">
       <div class="ico">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4z"/><path d="M18 15l.9 2.1 2.1.9-2.1.9L18 21l-.9-2.1-2.1-.9 2.1-.9z"/></svg>
       </div>
-      <h4 id="empty-title">검색 결과를 찾지 못했어요</h4>
-      <p id="empty-desc">다른 키워드로 찾아볼래요? 브랜드명·업종·태그로 검색할 수 있어요.</p>
+      <h4 id="empty-title">아직 분석하지 않은 브랜드예요</h4>
+      <p id="empty-desc">아래 문구를 복사해 클로드에게 붙여넣으면 분석해서 이 목록에 올려줘요.</p>
+      <div class="reqbox" id="reqbox" style="display:none">
+        <code id="reqtext">브랜드 분석해줘</code>
+        <button class="reqcopy" id="reqcopy" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <span id="reqcopy-label">문구 복사</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -216,8 +230,16 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
   var GRID=document.getElementById('rgrid'), EMPTY=document.getElementById('empty'),
       Q=document.getElementById('q'), BAR=document.getElementById('searchbar'),
       CLR=document.getElementById('clr'), HINT=document.getElementById('count-hint'),
-      ET=document.getElementById('empty-title'), ED=document.getElementById('empty-desc');
-  var DATA=[];
+      ET=document.getElementById('empty-title'), ED=document.getElementById('empty-desc'),
+      REQBOX=document.getElementById('reqbox'), REQTEXT=document.getElementById('reqtext'),
+      REQCOPY=document.getElementById('reqcopy'), REQLABEL=document.getElementById('reqcopy-label');
+  var DATA=[], loadOk=true;
+
+  function reqPrompt(term){
+    var t=term.trim();
+    // 주소처럼 보이면 URL로, 아니면 브랜드명으로 안내
+    return /[./]|https?:/i.test(t) ? (t+' 이 사이트(타사 브랜드) 분석해줘') : (t+' 브랜드 분석해줘');
+  }
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
@@ -236,7 +258,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
   function haystack(r){return [r.brand,r.brandEn,r.category,r.url,r.summary,(r.tags||[]).join(' ')].join(' ').toLowerCase();}
 
   function render(){
-    var q=Q.value.trim().toLowerCase();
+    var raw=Q.value.trim(), q=raw.toLowerCase();
     BAR.classList.toggle('has-value', q.length>0);
     var list=q? DATA.filter(function(r){return haystack(r).indexOf(q)>-1;}) : DATA.slice();
     list.sort(function(a,b){return (b.date||'').localeCompare(a.date||'');});
@@ -245,10 +267,26 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
       GRID.innerHTML=list.map(card).join('');
       HINT.textContent=q? list.length+'개 찾음' : '전체 '+DATA.length+'개';
     } else {
-      GRID.style.display='none'; EMPTY.style.display='';
-      HINT.textContent='0개';
+      GRID.style.display='none'; EMPTY.style.display=''; HINT.textContent='0개';
+      resetCopy();
+      if(!loadOk){
+        ET.textContent='목록을 불러오지 못했어요';
+        ED.textContent='reports.json을 읽지 못했어요. 웹 서버(또는 GitHub Pages)에서 열면 정상 작동해요.';
+        REQBOX.style.display='none';
+      } else if(raw){
+        ET.textContent='"'+raw+'" — 아직 분석하지 않은 브랜드예요';
+        ED.textContent='아래 문구를 복사해 클로드에게 붙여넣으면 분석해서 이 목록에 올려줘요.';
+        REQTEXT.textContent=reqPrompt(raw);
+        REQBOX.style.display='';
+      } else {
+        ET.textContent='아직 분석한 브랜드가 없어요';
+        ED.textContent='브랜드명이나 홈페이지 주소를 입력하면 분석 요청 문구를 만들어드려요.';
+        REQBOX.style.display='none';
+      }
     }
   }
+
+  function resetCopy(){ REQCOPY.classList.remove('done'); REQLABEL.textContent='문구 복사'; }
 
   function stats(){
     document.getElementById('stat-total').innerHTML=DATA.length+'<small>개</small>';
@@ -260,15 +298,25 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
 
   Q.addEventListener('input', render);
   CLR.addEventListener('click', function(){Q.value='';render();Q.focus();});
+  REQCOPY.addEventListener('click', function(){
+    var txt=REQTEXT.textContent;
+    function ok(){REQCOPY.classList.add('done');REQLABEL.textContent='복사했어요';}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(ok).catch(fallback);
+    } else { fallback(); }
+    function fallback(){
+      var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok();}catch(e){}document.body.removeChild(ta);
+    }
+  });
 
   fetch('reports.json',{cache:'no-store'}).then(function(res){return res.json();}).then(function(json){
     DATA=Array.isArray(json)?json:[];
     stats(); render();
   }).catch(function(){
-    ET.textContent='목록을 불러오지 못했어요';
-    ED.textContent='reports.json을 읽지 못했어요. 웹 서버(또는 GitHub Pages)에서 열면 정상 작동해요.';
+    loadOk=false;
     document.getElementById('stat-total').textContent='–';
-    GRID.style.display='none'; EMPTY.style.display='';
+    render();
   });
 })();
 </script>
