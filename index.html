@@ -133,6 +133,18 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
   background:var(--blue-500);color:#fff;border:none;border-radius:9px;padding:9px 14px;flex:0 0 auto;transition:.15s}
 .reqcopy:hover{background:var(--blue-600)}
 .reqcopy.done{background:var(--status-positive)}
+.reqrun{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  background:var(--blue-500);color:#fff;border:none;border-radius:11px;padding:12px 20px;margin-top:18px;transition:.15s}
+.reqrun:hover{background:var(--blue-600)}
+.reqrun:disabled{opacity:.6;cursor:default}
+.reqrun .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.reqrun.loading .spin{display:inline-block}
+.reqrun.loading .pico{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reqstatus{margin-top:14px;font-size:13.5px;color:var(--txt-secondary);display:none}
+.reqstatus a{color:var(--txt-blue-primary);font-weight:700;text-decoration:none}
+.reqstatus.err{color:var(--status-negative)}
+.reqor{font-size:12.5px;color:var(--txt-caption);margin-top:16px}
 
 /* Alert */
 .alert{display:flex;gap:10px;padding:14px 16px;border-radius:12px;font-size:13.5px;align-items:flex-start;margin-top:22px}
@@ -204,7 +216,16 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4z"/><path d="M18 15l.9 2.1 2.1.9-2.1.9L18 21l-.9-2.1-2.1-.9 2.1-.9z"/></svg>
       </div>
       <h4 id="empty-title">아직 분석하지 않은 브랜드예요</h4>
-      <p id="empty-desc">아래 문구를 복사해 클로드에게 붙여넣으면 분석해서 이 목록에 올려줘요.</p>
+      <p id="empty-desc">버튼을 누르면 AI가 웹을 뒤져 분석하고 이 목록에 올려줘요.</p>
+      <div id="reqactions" style="display:none">
+        <button class="reqrun" id="reqrun" type="button">
+          <svg class="pico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9V3z"/></svg>
+          <span class="spin"></span>
+          <span id="reqrun-label">지금 AI로 분석하기</span>
+        </button>
+      </div>
+      <div class="reqstatus" id="reqstatus"></div>
+      <div class="reqor" id="reqor" style="display:none">또는 클로드 채팅에 붙여넣어 분석을 맡겨요</div>
       <div class="reqbox" id="reqbox" style="display:none">
         <code id="reqtext">브랜드 분석해줘</code>
         <button class="reqcopy" id="reqcopy" type="button">
@@ -227,13 +248,20 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
 
 <script>
 (function(){
+  // 분석 API 서버 주소 — Railway 배포 후 여기에 넣어요 (예: 'https://brand-analyzer-api.up.railway.app').
+  // 비워두면 자동 분석 버튼은 숨고, 채팅 붙여넣기 문구만 나와요.
+  var API_BASE='';
+
   var GRID=document.getElementById('rgrid'), EMPTY=document.getElementById('empty'),
       Q=document.getElementById('q'), BAR=document.getElementById('searchbar'),
       CLR=document.getElementById('clr'), HINT=document.getElementById('count-hint'),
       ET=document.getElementById('empty-title'), ED=document.getElementById('empty-desc'),
       REQBOX=document.getElementById('reqbox'), REQTEXT=document.getElementById('reqtext'),
-      REQCOPY=document.getElementById('reqcopy'), REQLABEL=document.getElementById('reqcopy-label');
-  var DATA=[], loadOk=true;
+      REQCOPY=document.getElementById('reqcopy'), REQLABEL=document.getElementById('reqcopy-label'),
+      REQACT=document.getElementById('reqactions'), REQRUN=document.getElementById('reqrun'),
+      REQRUNLABEL=document.getElementById('reqrun-label'), REQSTATUS=document.getElementById('reqstatus'),
+      REQOR=document.getElementById('reqor');
+  var DATA=[], loadOk=true, busy=false;
 
   function reqPrompt(term){
     var t=term.trim();
@@ -275,13 +303,22 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
         REQBOX.style.display='none';
       } else if(raw){
         ET.textContent='"'+raw+'" — 아직 분석하지 않은 브랜드예요';
-        ED.textContent='아래 문구를 복사해 클로드에게 붙여넣으면 분석해서 이 목록에 올려줘요.';
         REQTEXT.textContent=reqPrompt(raw);
         REQBOX.style.display='';
+        REQSTATUS.style.display='none';
+        if(API_BASE){
+          ED.textContent='버튼을 누르면 AI가 웹을 뒤져 분석하고 이 목록에 올려줘요.';
+          REQACT.style.display=''; REQOR.style.display='';
+          REQRUN.disabled=false; REQRUN.classList.remove('loading'); REQRUNLABEL.textContent='지금 AI로 분석하기';
+          REQRUN.dataset.q=raw;
+        } else {
+          ED.textContent='아래 문구를 복사해 클로드에게 붙여넣으면 분석해서 이 목록에 올려줘요.';
+          REQACT.style.display='none'; REQOR.style.display='none';
+        }
       } else {
         ET.textContent='아직 분석한 브랜드가 없어요';
-        ED.textContent='브랜드명이나 홈페이지 주소를 입력하면 분석 요청 문구를 만들어드려요.';
-        REQBOX.style.display='none';
+        ED.textContent='브랜드명이나 홈페이지 주소를 입력하면 분석해줘요.';
+        REQBOX.style.display='none'; REQACT.style.display='none'; REQOR.style.display='none'; REQSTATUS.style.display='none';
       }
     }
   }
@@ -309,6 +346,34 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
       document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok();}catch(e){}document.body.removeChild(ta);
     }
   });
+
+  function analyze(){
+    if(busy||!API_BASE) return;
+    var q=(REQRUN.dataset.q||Q.value).trim();
+    if(!q) return;
+    busy=true;
+    REQRUN.classList.add('loading'); REQRUN.disabled=true; REQRUNLABEL.textContent='분석 중…';
+    REQSTATUS.className='reqstatus'; REQSTATUS.style.display='';
+    REQSTATUS.textContent='AI가 웹을 뒤져 분석하고 있어요. 최대 1~2분 걸려요. 창을 닫지 말아요.';
+    fetch(API_BASE.replace(/\/$/,'')+'/analyze',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})
+    }).then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+    .then(function(res){
+      var j=res.j||{};
+      if(!res.ok||!j.ok){ throw new Error(j.error||'분석에 실패했어요.'); }
+      REQRUN.classList.remove('loading'); REQRUNLABEL.textContent='분석 완료';
+      REQSTATUS.innerHTML='‘'+esc(j.brand||q)+'’ 분석을 마쳤어요! '
+        +'<a href="'+esc(j.reportUrl)+'" target="_blank" rel="noopener">리포트 열기 →</a>'
+        +'<br><span style="color:var(--txt-caption)">목록 반영엔 페이지 재빌드(~1분)가 필요해요. 잠시 후 새로고침하면 카드가 보여요.</span>';
+      // 30초 후 목록 자동 갱신 시도
+      setTimeout(function(){ fetch('reports.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(json){DATA=Array.isArray(json)?json:DATA;stats();}).catch(function(){}); },30000);
+    }).catch(function(e){
+      REQRUN.classList.remove('loading'); REQRUN.disabled=false; REQRUNLABEL.textContent='다시 분석하기';
+      REQSTATUS.className='reqstatus err'; REQSTATUS.style.display='';
+      REQSTATUS.textContent='분석 중 문제가 생겼어요: '+e.message+' — 아래 문구를 복사해 클로드에게 맡겨도 돼요.';
+    }).then(function(){ busy=false; });
+  }
+  REQRUN.addEventListener('click', analyze);
 
   fetch('reports.json',{cache:'no-store'}).then(function(res){return res.json();}).then(function(json){
     DATA=Array.isArray(json)?json:[];
