@@ -354,7 +354,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
     busy=true;
     REQRUN.classList.add('loading'); REQRUN.disabled=true; REQRUNLABEL.textContent='분석 중…';
     REQSTATUS.className='reqstatus'; REQSTATUS.style.display='';
-    REQSTATUS.textContent='AI가 웹을 뒤져 분석하고 있어요. 최대 1~2분 걸려요. 창을 닫지 말아요.';
+    REQSTATUS.textContent='AI가 웹을 여러 번 뒤져 꼼꼼히 분석하고 있어요. 2~3분 걸려요. 창을 닫지 말아요.';
     fetch(API_BASE.replace(/\/$/,'')+'/analyze',{
       method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})
     }).then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
