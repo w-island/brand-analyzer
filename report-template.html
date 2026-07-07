@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<!--
+  Competitor Brand Analyzer — 리포트 템플릿 (W-ISLAND 디자인 시스템 적용)
+  ┌─ 에이전트 사용법 ─────────────────────────────────────────────┐
+  │ 1) 이 파일을 그대로 복사한다.                                  │
+  │ 2) <head>와 <style>, 상단 GNB는 절대 건드리지 않는다.         │
+  │ 3) 아래 @SLOT:이름 ~ /@SLOT 주석 구간 안쪽만                  │
+  │    실제 분석 결과 마크업으로 교체한다.                          │
+  │ 4) 문구는 전부 해요체 6원칙. UI 색은 의미 토큰만(raw hex 금지).│
+  │    단, 분석 대상 브랜드의 색 스와치(.swatch)엔 실제 hex 허용.  │
+  │ 5) reports\YYYY-MM-DD_브랜드명.html 로 저장한다.               │
+  └───────────────────────────────────────────────────────────────┘
+-->
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1577cc">
+<title>Brand Analyzer — 타사 브랜드 분석 리포트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --blue-50:#ebf5fd;--blue-100:#cce6fa;--blue-200:#9fd0f4;--blue-300:#5cb4ee;
+  --blue-400:#1da4ff;--blue-500:#1577cc;--blue-600:#1166b0;--blue-700:#0e5390;
+  --blue-800:#0b4172;--blue-900:#093356;
+  --status-positive:#3BCC4B;--status-negative:#d6173a;--status-warning:#e8920c;
+}
+[data-theme="light"]{
+  --gray-50:#f9f9fa;--gray-100:#ececf0;--gray-200:#e3e3e8;--gray-300:#d6d7de;
+  --gray-400:#cecfd7;--gray-500:#c2c3cd;--gray-600:#b1b1bb;--gray-700:#8a8a92;
+  --gray-800:#6b6b71;--gray-900:#515256;--gray-1000:#2A2C2F;--g1000-rgb:42,44,47;
+  --surface-1:#ffffff;--surface-2:#f9fafb;--surface-3:#f2f4f6;
+  --txt-link:#1f7a8c;--bg-invert:#2A2C2F;--bg-blue-primary:#cce6fa;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.10);--shadow-xl:0 20px 48px rgba(0,0,0,.14);
+}
+[data-theme="dark"]{
+  --gray-50:#17171c;--gray-100:#202028;--gray-200:#292932;--gray-300:#3c3c46;
+  --gray-400:#4e4e5a;--gray-500:#6b6b78;--gray-600:#8b95a1;--gray-700:#a9adb8;
+  --gray-800:#c2c5cc;--gray-900:#e3e4e8;--gray-1000:#f3f4f6;--g1000-rgb:243,244,246;
+  --surface-1:#202028;--surface-2:#17171c;--surface-3:#292932;
+  --txt-link:#5ec8d2;--bg-invert:#f3f4f6;--bg-blue-primary:#0b4172;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow-md:0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.5);--shadow-xl:0 20px 48px rgba(0,0,0,.6);
+}
+:root{
+  --txt-primary:rgba(var(--g1000-rgb),1);--txt-secondary:rgba(var(--g1000-rgb),.80);
+  --txt-tertiary:rgba(var(--g1000-rgb),.60);--txt-caption:rgba(var(--g1000-rgb),.50);
+  --txt-disabled:rgba(var(--g1000-rgb),.30);
+  --txt-blue-primary:var(--blue-500);--txt-blue-secondary:var(--blue-400);
+  --bg-primary:var(--surface-1);--bg-secondary:var(--surface-2);--bg-tertiary:var(--surface-3);
+  --border-primary:var(--gray-1000);
+  --border-secondary:rgba(var(--g1000-rgb),.20);--border-tertiary:rgba(var(--g1000-rgb),.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--bg-secondary);color:var(--txt-primary);line-height:1.6;
+  -webkit-font-smoothing:antialiased;transition:background .18s,color .18s}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 20px 64px}
+
+/* GNB */
+.gnb{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;background:var(--bg-primary);border:1px solid var(--border-tertiary);
+  border-radius:12px;box-shadow:var(--shadow-sm);position:sticky;top:14px;z-index:10;margin-bottom:24px}
+.lockup{display:inline-flex;align-items:center;gap:11px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--blue-500);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.logo-title{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.logo-sub{font-size:12.5px;color:var(--txt-tertiary);font-weight:500}
+.theme-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border-secondary);
+  background:transparent;color:var(--txt-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{background:var(--bg-tertiary);color:var(--txt-primary)}
+
+/* Hero — 한 줄 요약 */
+.hero{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:28px 28px;box-shadow:var(--shadow-sm);margin-bottom:14px}
+.hero .eyebrow{font-size:12.5px;font-weight:700;color:var(--txt-blue-primary);letter-spacing:.02em;margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:7px}
+.hero h1{font-size:28px;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.hero .lead{font-size:16px;color:var(--txt-secondary);margin-top:12px;max-width:64ch}
+.hero .stamp{font-size:12px;color:var(--txt-caption);margin-top:16px}
+
+/* Section */
+.section{margin-top:34px}
+.section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.section-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.section-head .hint{font-size:13px;color:var(--txt-tertiary)}
+.card{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:22px;box-shadow:var(--shadow-sm)}
+.card + .card{margin-top:12px}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+  padding:4px 10px;border-radius:999px;white-space:nowrap}
+.badge.blue{background:color-mix(in srgb,var(--blue-500) 16%,var(--bg-primary));color:var(--txt-blue-primary)}
+.badge.pos{background:color-mix(in srgb,var(--status-positive) 18%,var(--bg-primary));color:var(--status-positive)}
+.badge.neg{background:color-mix(in srgb,var(--status-negative) 16%,var(--bg-primary));color:var(--status-negative)}
+.badge.gray{background:var(--bg-tertiary);color:var(--txt-secondary)}
+.badge.warn{background:color-mix(in srgb,var(--status-warning) 18%,var(--bg-primary));color:#9a6206}
+[data-theme="dark"] .badge.blue{color:var(--blue-200)}
+[data-theme="dark"] .badge.warn{color:#f0b35a}
+
+/* Overview key-value grid */
+.kv{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border-tertiary);
+  border:1px solid var(--border-tertiary);border-radius:14px;overflow:hidden}
+.kv .row{background:var(--bg-primary);padding:15px 18px}
+.kv .k{font-size:12px;font-weight:700;color:var(--txt-tertiary);margin-bottom:4px}
+.kv .v{font-size:15px;font-weight:600}
+
+/* Analysis block (재사용 — trend 패턴 기반) */
+.trend{display:flex;gap:16px;padding:18px;background:var(--bg-primary);
+  border:1px solid var(--border-tertiary);border-radius:14px;box-shadow:var(--shadow-sm)}
+.trend + .trend{margin-top:10px}
+.trend .rank{width:34px;height:34px;border-radius:10px;flex:0 0 auto;
+  background:color-mix(in srgb,var(--blue-500) 14%,var(--bg-primary));color:var(--blue-500);
+  font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+[data-theme="dark"] .trend .rank{color:var(--blue-200)}
+.trend .body{flex:1;min-width:0}
+.trend .tline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.trend .tname{font-size:17px;font-weight:700}
+.trend .why{font-size:14px;color:var(--txt-secondary)}
+.trend .src{font-size:12.5px;color:var(--txt-caption);margin-top:8px}
+
+/* Color swatches (분석 대상 브랜드 실제 색 — 데이터 표시용 예외) */
+.swatches{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.swatch{text-align:center}
+.swatch .chip{width:64px;height:64px;border-radius:12px;border:1px solid var(--border-tertiary);box-shadow:var(--shadow-sm)}
+.swatch .hex{font-size:11.5px;color:var(--txt-tertiary);margin-top:6px;font-weight:600;letter-spacing:.01em}
+
+/* Quote (실제 카피 인용) */
+.quote{border-left:3px solid var(--blue-500);padding:6px 0 6px 15px;margin:12px 0;
+  font-size:15px;font-weight:600;color:var(--txt-primary)}
+.quote .who{display:block;font-size:12.5px;font-weight:500;color:var(--txt-caption);margin-top:5px}
+
+/* Tag chip */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.tagchip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  background:var(--bg-tertiary);color:var(--txt-secondary);padding:5px 11px;border-radius:999px}
+.tagchip.brand{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .tagchip.brand{color:var(--blue-200)}
+
+/* Pros / Cons */
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.pc .box{border:1px solid var(--border-tertiary);border-radius:12px;padding:14px 16px;background:var(--bg-secondary)}
+.pc .box h4{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.pc .box.good h4{color:var(--status-positive)}
+.pc .box.weak h4{color:var(--status-negative)}
+.pc .box ul{list-style:none;font-size:13.5px;color:var(--txt-secondary)}
+.pc .box li{padding-left:14px;position:relative;margin-top:5px}
+.pc .box li::before{content:'·';position:absolute;left:3px;color:var(--txt-tertiary)}
+
+/* List rows (insights) */
+.actions .listrow{display:flex;gap:14px;padding:16px 18px;background:var(--bg-primary);
+  border:1px solid var(--border-tertiary)}
+.actions .listrow:first-child{border-radius:14px 14px 0 0}
+.actions .listrow:last-child{border-radius:0 0 14px 14px}
+.actions .listrow + .listrow{border-top:none}
+.actions .lead{width:38px;height:38px;border-radius:10px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--blue-500) 14%,var(--bg-primary));color:var(--blue-500);font-weight:800;font-size:13px}
+[data-theme="dark"] .actions .lead{color:var(--blue-200)}
+.actions .ab{flex:1;min-width:0}
+.actions .at{font-size:15px;font-weight:700;margin-bottom:3px}
+.actions .as{font-size:13.5px;color:var(--txt-secondary)}
+
+/* Alert (데이터 한계) */
+.alert{display:flex;gap:10px;padding:14px 16px;border-radius:12px;font-size:13.5px;align-items:flex-start;margin-top:16px}
+.alert.info{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .alert.info{color:var(--blue-200)}
+.alert .ico{flex:0 0 auto;margin-top:1px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border-tertiary);
+  font-size:12.5px;color:var(--txt-caption);text-align:center}
+
+@media (max-width:599px){
+  .kv,.pc{grid-template-columns:1fr}
+  .hero h1{font-size:23px}
+  .wrap{padding:14px 14px 48px}
+}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.22);border-radius:999px;border:4px solid transparent;background-clip:padding-box;min-height:44px}
+::-webkit-scrollbar-thumb:hover{background-color:rgba(0,0,0,.38)}
+[data-theme="dark"] ::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- GNB (고정 — 수정 금지) -->
+  <div class="gnb">
+    <div class="lockup">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </div>
+      <div>
+        <div class="logo-title">Brand Analyzer</div>
+        <div class="logo-sub">타사 브랜드 · UI·소재·카피·마케팅 분석</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="(function(h){h.dataset.theme=h.dataset.theme==='dark'?'light':'dark'})(document.documentElement)" aria-label="테마 바꾸기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+
+  <!-- @SLOT:HERO — 한 줄 요약 -->
+  <div class="hero">
+    <span class="eyebrow">● 이번 분석 대상</span>
+    <h1><b>[브랜드명]</b>은 <b>[핵심 인상]</b>으로 사람을 끌어모아요.</h1>
+    <p class="lead">첫 화면부터 [핵심 후킹 요소]로 시선을 잡고, [비주얼 톤]과 [카피 스타일]로 브랜드를 각인시켜요. 우리가 가장 배울 점은 [핵심 인사이트 1개]예요.</p>
+    <p class="stamp">분석일 YYYY-MM-DD · 대상 example.com · 근거: 스크린샷 N장 + 홈페이지 텍스트 · 시각 요소 일부 추정</p>
+  </div>
+  <!-- /@SLOT:HERO -->
+
+  <!-- @SLOT:OVERVIEW — 브랜드 개요 -->
+  <div class="section">
+    <div class="section-head"><h2>브랜드 개요</h2></div>
+    <div class="kv">
+      <div class="row"><div class="k">브랜드</div><div class="v">[브랜드명]</div></div>
+      <div class="row"><div class="k">홈페이지</div><div class="v">example.com</div></div>
+      <div class="row"><div class="k">업종 · 카테고리</div><div class="v">[예: 주얼리 · 데일리 액세서리]</div></div>
+      <div class="row"><div class="k">타깃</div><div class="v">[예: 20–30대 여성, 데일리 착용]</div></div>
+      <div class="row"><div class="k">포지셔닝</div><div class="v">[예: 가성비 미니멀 데일리]</div></div>
+      <div class="row"><div class="k">가격대</div><div class="v">[예: 2만~8만원대]</div></div>
+    </div>
+  </div>
+  <!-- /@SLOT:OVERVIEW -->
+
+  <!-- @SLOT:UIUX — 홈페이지 UI/UX 분석 -->
+  <div class="section">
+    <div class="section-head"><h2>UI/UX 디자인</h2><span class="hint">홈페이지 화면 구성</span></div>
+    <div class="card">
+      <div class="chips" style="margin-top:0">
+        <span class="tagchip brand">미니멀</span><span class="tagchip">넓은 여백</span><span class="tagchip">큰 상품 이미지</span><span class="tagchip">그리드 중심</span>
+      </div>
+      <div class="swatches" style="margin-top:16px">
+        <div class="swatch"><div class="chip" style="background:#000000"></div><div class="hex">#000000</div></div>
+        <div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="hex">#FFFFFF</div></div>
+        <div class="swatch"><div class="chip" style="background:#c8b6a6"></div><div class="hex">#C8B6A6</div></div>
+        <div class="swatch"><div class="chip" style="background:#f4f1ec"></div><div class="hex">#F4F1EC</div></div>
+      </div>
+      <p class="why" style="margin-top:16px">첫 화면(어보브더폴드 = 스크롤 전 보이는 영역)을 큰 메인 비주얼 하나로 채우고, 아래로 상품 그리드를 규칙적으로 배치해요. 여백을 넉넉히 둬서 상품 하나하나가 커 보여요. 색은 무채색 + 뉴트럴 베이지로 차분하게 잡았어요.</p>
+      <div class="pc">
+        <div class="box good"><h4>잘한 점</h4><ul><li>상품 이미지가 크고 통일돼 브랜드가 정돈돼 보여요</li><li>메뉴가 얕아(2단계) 길을 잃지 않아요</li></ul></div>
+        <div class="box weak"><h4>아쉬운 점</h4><ul><li>첫 화면에 브랜드가 뭘 파는지 한 줄 설명이 약해요</li><li>모바일에서 글자가 작아 가독성이 떨어져요</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <!-- /@SLOT:UIUX -->
+
+  <!-- @SLOT:CREATIVES — 광고/비주얼 소재 -->
+  <div class="section">
+    <div class="section-head"><h2>광고 · 비주얼 소재</h2><span class="hint">크리에이티브 패턴</span></div>
+    <div class="trend">
+      <div class="rank">A</div>
+      <div class="body">
+        <div class="tline"><span class="tname">메인 비주얼 — 자연광 실사 모델컷</span><span class="badge blue">반복 패턴</span></div>
+        <p class="why">스튜디오보다 자연광 실내/야외 착용컷을 많이 써요. 모델 얼굴보다 착용 부위(귀·목·손)를 클로즈업해 제품이 주인공이에요.</p>
+        <div class="chips"><span class="tagchip">자연광</span><span class="tagchip">착용 클로즈업</span><span class="tagchip">뉴트럴 배경</span></div>
+        <p class="src">근거: 사용자 제공 스크린샷 3장(메인·상세·이벤트)</p>
+      </div>
+    </div>
+    <div class="trend">
+      <div class="rank">B</div>
+      <div class="body">
+        <div class="tline"><span class="tname">이벤트 배너 — 타이포 중심 세일 그래픽</span><span class="badge gray">간헐적</span></div>
+        <p class="why">할인 배너는 큰 숫자(%)와 굵은 타이포로 시선을 잡아요. 상품컷 위에 반투명 띠를 얹어 문구를 올리는 방식이에요.</p>
+        <div class="chips"><span class="tagchip">큰 숫자 강조</span><span class="tagchip">반투명 오버레이</span></div>
+        <p class="src">근거: 홈페이지 상단 배너 텍스트 + 스크린샷</p>
+      </div>
+    </div>
+  </div>
+  <!-- /@SLOT:CREATIVES -->
+
+  <!-- @SLOT:COPY — 카피 & 후킹 -->
+  <div class="section">
+    <div class="section-head"><h2>카피 &amp; 후킹</h2><span class="hint">사람을 끌어모으는 문구</span></div>
+    <div class="card">
+      <div class="quote">"[실제 메인 헤드라인을 그대로 인용]"<span class="who">메인 히어로 헤드라인</span></div>
+      <div class="quote">"[실제 CTA·이벤트 문구 인용]"<span class="who">메인 CTA(행동 유도 버튼)</span></div>
+      <p class="why" style="margin-top:14px">감정(설렘)보다 이득(혜택·가격)과 희소성(한정·기간)을 앞세워요. "지금", "단독", "무료배송" 같은 전환 트리거를 반복해서 클릭을 유도해요.</p>
+      <div class="chips">
+        <span class="tagchip brand">희소성(한정·기간)</span><span class="tagchip brand">사회적 증거(리뷰 수)</span><span class="tagchip brand">이득 강조(혜택·가격)</span><span class="tagchip">반말 톤</span>
+      </div>
+    </div>
+  </div>
+  <!-- /@SLOT:COPY -->
+
+  <!-- @SLOT:MARKETING — 마케팅 전략 -->
+  <div class="section actions">
+    <div class="section-head"><h2>마케팅 전략</h2></div>
+    <div>
+      <div class="listrow"><div class="lead">P</div><div class="ab"><div class="at">포지셔닝</div><div class="as">[누구에게 · 무엇을 · 왜 사는지. 한 문장으로]</div></div></div>
+      <div class="listrow"><div class="lead">U</div><div class="ab"><div class="at">차별점(USP)</div><div class="as">[경쟁사와 다른 한 가지 — 예: 당일배송, 무료각인, 실착 리뷰]</div></div></div>
+      <div class="listrow"><div class="lead">$</div><div class="ab"><div class="at">프로모션 구조</div><div class="as">[신규가입 쿠폰 · 번들할인 · 멤버십 등급 등 전환 설계]</div></div></div>
+      <div class="listrow"><div class="lead">#</div><div class="ab"><div class="at">채널</div><div class="as">[인스타 @handle · 유튜브 · 카톡채널 · 뉴스레터 유입 등]</div></div></div>
+    </div>
+  </div>
+  <!-- /@SLOT:MARKETING -->
+
+  <!-- @SLOT:INSIGHTS — W-ISLAND 인사이트 -->
+  <div class="section actions">
+    <div class="section-head"><h2>W-ISLAND 인사이트</h2><span class="hint">우리가 바로 쓸 것</span></div>
+    <div>
+      <div class="listrow"><div class="lead">1</div><div class="ab"><div class="at">따라 할 것 — 히어로에 사회적 증거 얹기</div><div class="as">첫 화면 헤드라인 옆에 누적 리뷰 수를 넣는 방식은 wbL 자사몰 첫 화면에 바로 적용해봐요.</div></div></div>
+      <div class="listrow"><div class="lead">2</div><div class="ab"><div class="at">응용할 것 — 착용 클로즈업컷</div><div class="as">제품을 주인공으로 두는 자연광 클로즈업은 좋지만, wbL은 세이지그린·여름 무드를 살려 우리 톤으로 재해석해요.</div></div></div>
+      <div class="listrow"><div class="lead">✓</div><div class="ab"><div class="at">우리가 더 나은 것 — 에디토리얼 톤</div><div class="as">이 브랜드는 세일 중심이라 다소 시끄러워요. wbL의 차분한 에디토리얼 감성은 그대로 지켜요.</div></div></div>
+    </div>
+  </div>
+  <!-- /@SLOT:INSIGHTS -->
+
+  <!-- @SLOT:DATANOTE — 데이터 한계 메모 (항상 표기) -->
+  <div class="section">
+    <div class="alert info">
+      <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+      <div>이 리포트는 <b>템플릿 미리보기용 샘플</b>이에요. 실제 실행 땐 대상 홈페이지를 새로 가져오고, 사용자가 준 스크린샷으로 시각 요소를 채워요.
+      색·레이아웃·광고 비주얼은 <b>스크린샷이 있어야 정확</b>해요(WebFetch는 텍스트만 봐요). 스크린샷 없이 판단한 부분은 "추정"으로 표기했어요.</div>
+    </div>
+  </div>
+  <!-- /@SLOT:DATANOTE -->
+
+  <div class="footer">Competitor Brand Analyzer · W-ISLAND 디자인 시스템 적용</div>
+
+</div>
+</body>
+</html>

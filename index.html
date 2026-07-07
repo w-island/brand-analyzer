@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<!-- Competitor Brand Analyzer — 대시보드(검색·열람) · W-ISLAND 디자인 시스템 -->
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1577cc">
+<title>Brand Analyzer — 타사 브랜드 분석 대시보드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --blue-50:#ebf5fd;--blue-100:#cce6fa;--blue-200:#9fd0f4;--blue-300:#5cb4ee;
+  --blue-400:#1da4ff;--blue-500:#1577cc;--blue-600:#1166b0;--blue-700:#0e5390;
+  --blue-800:#0b4172;--blue-900:#093356;
+  --status-positive:#3BCC4B;--status-negative:#d6173a;--status-warning:#e8920c;
+}
+[data-theme="light"]{
+  --gray-50:#f9f9fa;--gray-100:#ececf0;--gray-200:#e3e3e8;--gray-300:#d6d7de;
+  --gray-400:#cecfd7;--gray-500:#c2c3cd;--gray-600:#b1b1bb;--gray-700:#8a8a92;
+  --gray-800:#6b6b71;--gray-900:#515256;--gray-1000:#2A2C2F;--g1000-rgb:42,44,47;
+  --surface-1:#ffffff;--surface-2:#f9fafb;--surface-3:#f2f4f6;
+  --txt-link:#1f7a8c;--bg-invert:#2A2C2F;--bg-blue-primary:#cce6fa;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.10);--shadow-xl:0 20px 48px rgba(0,0,0,.14);
+}
+[data-theme="dark"]{
+  --gray-50:#17171c;--gray-100:#202028;--gray-200:#292932;--gray-300:#3c3c46;
+  --gray-400:#4e4e5a;--gray-500:#6b6b78;--gray-600:#8b95a1;--gray-700:#a9adb8;
+  --gray-800:#c2c5cc;--gray-900:#e3e4e8;--gray-1000:#f3f4f6;--g1000-rgb:243,244,246;
+  --surface-1:#202028;--surface-2:#17171c;--surface-3:#292932;
+  --txt-link:#5ec8d2;--bg-invert:#f3f4f6;--bg-blue-primary:#0b4172;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow-md:0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.5);--shadow-xl:0 20px 48px rgba(0,0,0,.6);
+}
+:root{
+  --txt-primary:rgba(var(--g1000-rgb),1);--txt-secondary:rgba(var(--g1000-rgb),.80);
+  --txt-tertiary:rgba(var(--g1000-rgb),.60);--txt-caption:rgba(var(--g1000-rgb),.50);
+  --txt-disabled:rgba(var(--g1000-rgb),.30);
+  --txt-blue-primary:var(--blue-500);--txt-blue-secondary:var(--blue-400);
+  --bg-primary:var(--surface-1);--bg-secondary:var(--surface-2);--bg-tertiary:var(--surface-3);
+  --border-primary:var(--gray-1000);
+  --border-secondary:rgba(var(--g1000-rgb),.20);--border-tertiary:rgba(var(--g1000-rgb),.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  background:var(--bg-secondary);color:var(--txt-primary);line-height:1.6;
+  -webkit-font-smoothing:antialiased;transition:background .18s,color .18s}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 20px 64px}
+
+/* GNB */
+.gnb{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;background:var(--bg-primary);border:1px solid var(--border-tertiary);
+  border-radius:12px;box-shadow:var(--shadow-sm);position:sticky;top:14px;z-index:10;margin-bottom:24px}
+.lockup{display:inline-flex;align-items:center;gap:11px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--blue-500);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.logo-title{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.logo-sub{font-size:12.5px;color:var(--txt-tertiary);font-weight:500}
+.theme-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border-secondary);
+  background:transparent;color:var(--txt-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{background:var(--bg-tertiary);color:var(--txt-primary)}
+
+/* Hero */
+.hero{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:28px 28px;box-shadow:var(--shadow-sm);margin-bottom:14px}
+.hero .eyebrow{font-size:12.5px;font-weight:700;color:var(--txt-blue-primary);letter-spacing:.02em;margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:7px}
+.hero h1{font-size:28px;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.hero .lead{font-size:16px;color:var(--txt-secondary);margin-top:12px;max-width:62ch}
+
+/* Search field */
+.searchbar{display:flex;align-items:center;gap:10px;margin-top:20px;background:var(--bg-primary);
+  border:1.5px solid var(--border-secondary);border-radius:12px;padding:2px 14px;transition:.15s}
+.searchbar:focus-within{border-color:var(--blue-500)}
+.searchbar svg{color:var(--txt-tertiary);flex:0 0 auto}
+.searchbar input{flex:1;font-family:inherit;font-size:15px;color:var(--txt-primary);background:none;
+  border:none;outline:none;padding:13px 0}
+.searchbar input::placeholder{color:var(--txt-disabled)}
+.searchbar .clr{width:26px;height:26px;border:none;background:none;color:var(--txt-tertiary);cursor:pointer;
+  border-radius:50%;display:none;align-items:center;justify-content:center;flex:0 0 auto}
+.searchbar .clr:hover{background:var(--bg-tertiary);color:var(--txt-primary)}
+.searchbar.has-value .clr{display:flex}
+
+/* Stat row */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 6px}
+.stat{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:14px;
+  padding:16px 18px;box-shadow:var(--shadow-sm)}
+.stat .snum{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.stat .snum small{font-size:14px;font-weight:700;color:var(--txt-tertiary);margin-left:2px}
+.stat .snum b{color:var(--txt-blue-primary);font-weight:800}
+.stat .slabel{font-size:12.5px;color:var(--txt-tertiary);margin-top:4px}
+
+/* Section */
+.section{margin-top:30px}
+.section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.section-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.section-head .hint{font-size:13px;color:var(--txt-tertiary)}
+
+/* Report cards */
+.rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.rcard{display:flex;flex-direction:column;background:var(--bg-primary);text-decoration:none;color:inherit;
+  border:1px solid var(--border-tertiary);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);transition:.15s}
+.rcard:hover{box-shadow:var(--shadow-md);border-color:var(--border-secondary);transform:translateY(-2px)}
+.rcard .rtop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
+.rcard .rname{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.rcard .rname .en{font-size:13px;font-weight:600;color:var(--txt-tertiary);margin-left:6px}
+.rcard .rcat{font-size:13px;color:var(--txt-blue-primary);font-weight:600;margin-bottom:8px}
+.rcard .rsum{font-size:14px;color:var(--txt-secondary);flex:1}
+.rcard .rchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.rcard .rfoot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;
+  padding-top:13px;border-top:1px solid var(--border-tertiary)}
+.rcard .rmeta{font-size:12px;color:var(--txt-caption)}
+.rcard .rgo{font-size:13px;font-weight:700;color:var(--txt-blue-primary);display:inline-flex;align-items:center;gap:4px}
+[data-theme="dark"] .rcard .rcat,[data-theme="dark"] .rcard .rgo{color:var(--blue-300)}
+
+.tagchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;
+  background:var(--bg-tertiary);color:var(--txt-secondary);padding:4px 10px;border-radius:999px}
+.tagchip.brand{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .tagchip.brand{color:var(--blue-200)}
+
+/* Empty state */
+.empty{text-align:center;padding:48px 20px;background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px}
+.empty .ico{width:56px;height:56px;border-radius:16px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;
+  background:var(--bg-blue-primary);color:var(--blue-500)}
+[data-theme="dark"] .empty .ico{color:var(--blue-200)}
+.empty h4{font-size:16px;font-weight:700}
+.empty p{font-size:14px;color:var(--txt-tertiary);margin-top:8px}
+
+/* Alert */
+.alert{display:flex;gap:10px;padding:14px 16px;border-radius:12px;font-size:13.5px;align-items:flex-start;margin-top:22px}
+.alert.info{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+[data-theme="dark"] .alert.info{color:var(--blue-200)}
+.alert .ico{flex:0 0 auto;margin-top:1px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border-tertiary);
+  font-size:12.5px;color:var(--txt-caption);text-align:center}
+
+@media (max-width:599px){
+  .rgrid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr;gap:10px}
+  .hero h1{font-size:23px}
+  .wrap{padding:14px 14px 48px}
+}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.22);border-radius:999px;border:4px solid transparent;background-clip:padding-box;min-height:44px}
+::-webkit-scrollbar-thumb:hover{background-color:rgba(0,0,0,.38)}
+[data-theme="dark"] ::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- GNB -->
+  <div class="gnb">
+    <div class="lockup">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </div>
+      <div>
+        <div class="logo-title">Brand Analyzer</div>
+        <div class="logo-sub">타사 브랜드 · UI·소재·카피·마케팅 분석</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="(function(h){h.dataset.theme=h.dataset.theme==='dark'?'light':'dark'})(document.documentElement)" aria-label="테마 바꾸기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+
+  <!-- HERO + 검색 -->
+  <div class="hero">
+    <span class="eyebrow">● 타사 브랜드 분석 모음</span>
+    <h1>분석한 브랜드를 검색해서 바로 열어봐요.</h1>
+    <p class="lead">타사 홈페이지의 UI·광고 소재·카피·마케팅을 뜯어본 리포트를 한곳에 모았어요. 브랜드명·업종·키워드로 찾아서 리포트를 열어봐요.</p>
+    <div class="searchbar" id="searchbar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="브랜드명·업종·키워드로 검색해요 (예: 마사지, 광고, D2C)" autocomplete="off" aria-label="브랜드 검색">
+      <button class="clr" id="clr" aria-label="검색어 지우기">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 요약 지표 -->
+  <div class="stats">
+    <div class="stat"><div class="snum" id="stat-total">–</div><div class="slabel">분석한 브랜드</div></div>
+    <div class="stat"><div class="snum" id="stat-cat">–</div><div class="slabel">다룬 업종</div></div>
+    <div class="stat"><div class="snum" id="stat-recent">–</div><div class="slabel">최근 분석일</div></div>
+  </div>
+
+  <!-- 리포트 목록 -->
+  <div class="section">
+    <div class="section-head"><h2>분석 리포트</h2><span class="hint" id="count-hint"></span></div>
+    <div class="rgrid" id="rgrid"></div>
+    <div class="empty" id="empty" style="display:none">
+      <div class="ico">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </div>
+      <h4 id="empty-title">검색 결과를 찾지 못했어요</h4>
+      <p id="empty-desc">다른 키워드로 찾아볼래요? 브랜드명·업종·태그로 검색할 수 있어요.</p>
+    </div>
+  </div>
+
+  <!-- 안내 -->
+  <div class="alert info">
+    <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+    <div>새 브랜드를 분석하려면 클로드에게 <b>"OO 브랜드 분석해줘"</b>라고 말해요. 분석기가 리포트를 만들어 이 목록에 자동으로 더해줘요. 색·광고 비주얼처럼 화면으로만 알 수 있는 건 <b>스크린샷을 주면</b> 훨씬 정확해져요.</div>
+  </div>
+
+  <div class="footer">Competitor Brand Analyzer · W-ISLAND 디자인 시스템 적용</div>
+
+</div>
+
+<script>
+(function(){
+  var GRID=document.getElementById('rgrid'), EMPTY=document.getElementById('empty'),
+      Q=document.getElementById('q'), BAR=document.getElementById('searchbar'),
+      CLR=document.getElementById('clr'), HINT=document.getElementById('count-hint'),
+      ET=document.getElementById('empty-title'), ED=document.getElementById('empty-desc');
+  var DATA=[];
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  function card(r){
+    var tags=(r.tags||[]).map(function(t){return '<span class="tagchip brand">'+esc(t)+'</span>';}).join('');
+    return '<a class="rcard" href="'+esc(r.file)+'" target="_blank" rel="noopener">'
+      +'<div class="rtop"><div class="rname">'+esc(r.brand)+(r.brandEn?'<span class="en">'+esc(r.brandEn)+'</span>':'')+'</div></div>'
+      +(r.category?'<div class="rcat">'+esc(r.category)+'</div>':'')
+      +'<div class="rsum">'+esc(r.summary)+'</div>'
+      +(tags?'<div class="rchips">'+tags+'</div>':'')
+      +'<div class="rfoot"><span class="rmeta">'+esc(r.url||'')+(r.date?' · '+esc(r.date):'')+'</span>'
+      +'<span class="rgo">리포트 열기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>'
+      +'</a>';
+  }
+
+  function haystack(r){return [r.brand,r.brandEn,r.category,r.url,r.summary,(r.tags||[]).join(' ')].join(' ').toLowerCase();}
+
+  function render(){
+    var q=Q.value.trim().toLowerCase();
+    BAR.classList.toggle('has-value', q.length>0);
+    var list=q? DATA.filter(function(r){return haystack(r).indexOf(q)>-1;}) : DATA.slice();
+    list.sort(function(a,b){return (b.date||'').localeCompare(a.date||'');});
+    if(list.length){
+      GRID.style.display=''; EMPTY.style.display='none';
+      GRID.innerHTML=list.map(card).join('');
+      HINT.textContent=q? list.length+'개 찾음' : '전체 '+DATA.length+'개';
+    } else {
+      GRID.style.display='none'; EMPTY.style.display='';
+      HINT.textContent='0개';
+    }
+  }
+
+  function stats(){
+    document.getElementById('stat-total').innerHTML=DATA.length+'<small>개</small>';
+    var cats={}; DATA.forEach(function(r){(r.category||'').split('·').forEach(function(c){c=c.trim();if(c)cats[c]=1;});});
+    document.getElementById('stat-cat').innerHTML=Object.keys(cats).length+'<small>개</small>';
+    var recent=DATA.map(function(r){return r.date||'';}).sort().reverse()[0]||'–';
+    document.getElementById('stat-recent').textContent=recent;
+  }
+
+  Q.addEventListener('input', render);
+  CLR.addEventListener('click', function(){Q.value='';render();Q.focus();});
+
+  fetch('reports.json',{cache:'no-store'}).then(function(res){return res.json();}).then(function(json){
+    DATA=Array.isArray(json)?json:[];
+    stats(); render();
+  }).catch(function(){
+    ET.textContent='목록을 불러오지 못했어요';
+    ED.textContent='reports.json을 읽지 못했어요. 웹 서버(또는 GitHub Pages)에서 열면 정상 작동해요.';
+    document.getElementById('stat-total').textContent='–';
+    GRID.style.display='none'; EMPTY.style.display='';
+  });
+})();
+</script>
+</body>
+</html>
