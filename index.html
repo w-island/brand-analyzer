@@ -146,6 +146,35 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
 .reqstatus.err{color:var(--status-negative)}
 .reqor{font-size:12.5px;color:var(--txt-caption);margin-top:16px}
 
+/* Ad copy panel */
+.copanel{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:16px;
+  padding:20px 22px;box-shadow:var(--shadow-sm)}
+.cgroup{margin-bottom:14px}
+.cgroup .glabel{font-size:12px;font-weight:700;color:var(--txt-tertiary);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.cgroup .glabel b{color:var(--txt-blue-primary);font-weight:700}
+.cchips{display:flex;flex-wrap:wrap;gap:8px}
+.cchip{font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;background:var(--bg-tertiary);
+  color:var(--txt-secondary);border:1.5px solid transparent;border-radius:999px;padding:7px 14px;transition:.13s}
+.cchip:hover{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
+.cchip.on{background:var(--bg-blue-primary);color:var(--txt-blue-primary);border-color:var(--blue-500)}
+[data-theme="dark"] .cchip.on,[data-theme="dark"] .cchip:hover{color:var(--blue-200)}
+.crow{display:flex;align-items:center;gap:10px;margin-top:4px;background:var(--bg-secondary);
+  border:1.5px solid var(--border-secondary);border-radius:12px;padding:2px 6px 2px 14px;transition:.15s}
+.crow:focus-within{border-color:var(--blue-500)}
+.crow input{flex:1;font-family:inherit;font-size:15px;color:var(--txt-primary);background:none;border:none;outline:none;padding:12px 0}
+.crow input::placeholder{color:var(--txt-disabled)}
+.crun{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  background:var(--blue-500);color:#fff;border:none;border-radius:10px;padding:11px 18px;flex:0 0 auto;transition:.15s}
+.crun:hover{background:var(--blue-600)}
+.crun:disabled{opacity:.6;cursor:default}
+.crun .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.crun.loading .spin{display:inline-block}
+.crun.loading .pico{display:none}
+.cstatus{margin-top:14px;font-size:13.5px;color:var(--txt-secondary);display:none}
+.cstatus a{color:var(--txt-blue-primary);font-weight:700;text-decoration:none}
+.cstatus.err{color:var(--status-negative)}
+.cnote{font-size:12.5px;color:var(--txt-caption);margin-top:12px}
+
 /* Alert */
 .alert{display:flex;gap:10px;padding:14px 16px;border-radius:12px;font-size:13.5px;align-items:flex-start;margin-top:22px}
 .alert.info{background:var(--bg-blue-primary);color:var(--txt-blue-primary)}
@@ -234,6 +263,43 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- 광고 문구 뽑기 -->
+  <div class="section">
+    <div class="section-head"><h2>광고 문구 뽑기</h2><span class="hint">제품 카테고리 → 요즘 잘 먹히는 후킹 카피</span></div>
+    <div class="copanel">
+      <div class="cgroup">
+        <div class="glabel"><b>wbL</b> · 주얼리</div>
+        <div class="cchips" data-brand="wbL">
+          <button class="cchip" type="button">귀걸이</button>
+          <button class="cchip" type="button">목걸이</button>
+          <button class="cchip" type="button">반지</button>
+          <button class="cchip" type="button">팔찌</button>
+          <button class="cchip" type="button">헤어 액세서리</button>
+        </div>
+      </div>
+      <div class="cgroup">
+        <div class="glabel"><b>VIVOIR</b> · 뷰티·웰니스</div>
+        <div class="cchips" data-brand="VIVOIR">
+          <button class="cchip" type="button">마사지기</button>
+          <button class="cchip" type="button">뷰티 디바이스</button>
+          <button class="cchip" type="button">바디케어</button>
+          <button class="cchip" type="button">스킨케어</button>
+        </div>
+      </div>
+      <div class="crow">
+        <input id="cq" type="text" placeholder="제품 카테고리를 넣거나 위에서 골라요 (예: 귀걸이, 마사지기)" autocomplete="off" aria-label="제품 카테고리">
+        <button class="crun" id="crun" type="button">
+          <svg class="pico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          <span class="spin"></span>
+          <span id="crun-label">광고 문구 뽑기</span>
+        </button>
+      </div>
+      <div class="cstatus" id="cstatus"></div>
+      <div class="cnote">실제 클릭수·CTR은 광고주 비공개라 못 가져와요. 오래 집행 중인 광고·반복 패턴·반응 높은 게시물을 "잘 클릭되는 것"의 대체 신호로 삼아요.</div>
+    </div>
+    <div class="rgrid" id="cgrid" style="margin-top:16px"></div>
   </div>
 
   <!-- 안내 -->
@@ -374,6 +440,68 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
     }).then(function(){ busy=false; });
   }
   REQRUN.addEventListener('click', analyze);
+
+  /* ── 광고 문구 뽑기 ── */
+  var CQ=document.getElementById('cq'), CRUN=document.getElementById('crun'),
+      CRUNLABEL=document.getElementById('crun-label'), CSTATUS=document.getElementById('cstatus'),
+      CGRID=document.getElementById('cgrid'), cbusy=false;
+
+  Array.prototype.forEach.call(document.querySelectorAll('.cchip'), function(chip){
+    chip.addEventListener('click', function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.cchip'), function(c){c.classList.remove('on');});
+      chip.classList.add('on');
+      CQ.value=chip.textContent.trim();
+    });
+  });
+
+  function ccard(r){
+    var tags=(r.tags||[]).map(function(t){return '<span class="tagchip brand">'+esc(t)+'</span>';}).join('');
+    return '<a class="rcard" href="'+esc(r.file)+'" target="_blank" rel="noopener">'
+      +'<div class="rtop"><div class="rname">'+esc(r.title||r.category)+'</div></div>'
+      +(r.brand?'<div class="rcat">'+esc(r.brand)+' · 광고 문구</div>':'<div class="rcat">광고 문구</div>')
+      +'<div class="rsum">'+esc(r.summary)+'</div>'
+      +(tags?'<div class="rchips">'+tags+'</div>':'')
+      +'<div class="rfoot"><span class="rmeta">'+esc(r.category||'')+(r.count?' · 문구 '+esc(r.count)+'개':'')+(r.date?' · '+esc(r.date):'')+'</span>'
+      +'<span class="rgo">문구 열기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>'
+      +'</a>';
+  }
+
+  function loadCopies(){
+    fetch('copies.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(json){
+      var list=Array.isArray(json)?json:[];
+      list.sort(function(a,b){return (b.date||'').localeCompare(a.date||'');});
+      CGRID.innerHTML=list.map(ccard).join('');
+    }).catch(function(){ CGRID.innerHTML=''; });
+  }
+
+  function adcopy(){
+    if(cbusy||!API_BASE) return;
+    var cat=CQ.value.trim();
+    if(!cat){ CSTATUS.className='cstatus err'; CSTATUS.style.display=''; CSTATUS.textContent='제품 카테고리를 넣거나 위에서 골라요.'; return; }
+    cbusy=true;
+    CRUN.classList.add('loading'); CRUN.disabled=true; CRUNLABEL.textContent='뽑는 중…';
+    CSTATUS.className='cstatus'; CSTATUS.style.display='';
+    CSTATUS.textContent='요즘 잘 먹히는 광고 문구를 웹에서 뒤지고 우리 브랜드용 카피를 만들고 있어요. 2~3분 걸려요. 창을 닫지 말아요.';
+    fetch(API_BASE.replace(/\/$/,'')+'/adcopy',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:cat})
+    }).then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+    .then(function(res){
+      var j=res.j||{};
+      if(!res.ok||!j.ok){ throw new Error(j.error||'문구 생성에 실패했어요.'); }
+      CRUN.classList.remove('loading'); CRUN.disabled=false; CRUNLABEL.textContent='다시 뽑기';
+      CSTATUS.innerHTML='‘'+esc(j.category||cat)+'’ 광고 문구를 만들었어요! '
+        +'<a href="'+esc(j.reportUrl)+'" target="_blank" rel="noopener">문구 열기 →</a>'
+        +'<br><span style="color:var(--txt-caption)">아래 목록 반영엔 페이지 재빌드(~1분)가 필요해요. 잠시 후 새로고침하면 카드가 보여요.</span>';
+      setTimeout(loadCopies, 30000);
+    }).catch(function(e){
+      CRUN.classList.remove('loading'); CRUN.disabled=false; CRUNLABEL.textContent='다시 뽑기';
+      CSTATUS.className='cstatus err'; CSTATUS.style.display='';
+      CSTATUS.textContent='문구를 만드는 중 문제가 생겼어요: '+e.message;
+    }).then(function(){ cbusy=false; });
+  }
+  CRUN.addEventListener('click', adcopy);
+  CQ.addEventListener('keydown', function(e){ if(e.key==='Enter') adcopy(); });
+  loadCopies();
 
   fetch('reports.json',{cache:'no-store'}).then(function(res){return res.json();}).then(function(json){
     DATA=Array.isArray(json)?json:[];
